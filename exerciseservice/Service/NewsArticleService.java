@@ -43,17 +43,20 @@ public class NewsArticleService {
         return false;
     }
 
-public ArrayList<NewsArticle> PublishNews(){
-        ArrayList<NewsArticle>publishNews=new ArrayList<>();
-    for(NewsArticle n:newsArticles){
-            if(n.isPublished()){
-               n.setPublished(true);
-                publishNews.add(n);
+public boolean PublishNews( NewsArticle newsArticle){
+        for(int i=0;i<publishNews.size();i++) {
+            if (publishNews.get(i).isPublished() && publishNews.get(i).getId().equals(newsArticle.getId())) {
+                publishNews.get(i).setPublished(true);
+                publishNews.add(newsArticle);
+                return true;
             }
-    }
-    return publishNews;
+        }
 
-}
+    return false; }
+
+      public ArrayList<NewsArticle> getNewsIsPublish() {
+        return publishNews;
+    }
 
 public ArrayList<NewsArticle> GetByCategory(String category){
         ArrayList<NewsArticle>NewsByCategory=new ArrayList<>();
