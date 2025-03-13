@@ -59,14 +59,24 @@ public ResponseEntity updateAllNewsArticle(@PathVariable String id,@RequestBody 
         return ResponseEntity.status(400).body(new ApiResponse("the newsArticle not Found"));
     }
 
-    @GetMapping("/published")
-    public ResponseEntity Published(){
-        ArrayList<NewsArticle> PublishArray=NewArt.PublishNews();
-        if(PublishArray==null){
-            return ResponseEntity.status(400).body(new ApiResponse("The Array is Empty"));
+   @PostMapping("/published")
+    public ResponseEntity Published(@RequestBody @Valid NewsArticle newsArticle,Errors errors){
+        if(errors.hasErrors()){
+            String message=errors.getFieldError().getDefaultMessage();
+            return ResponseEntity.status(400).body(message);
+        }
+        boolean Publish=NewArt.PublishNews(newsArticle);
+        if(Publish){
+            return ResponseEntity.status(200).body(new ApiResponse("Success"));
 
         }
-            return ResponseEntity.status(200).body(PublishArray);}
+            return ResponseEntity.status(400).body(new ApiResponse("The News Article is not Publish"));}
+
+       @GetMapping("/getPublished")
+    public ResponseEntity getPublished(){
+        ArrayList<NewsArticle> ArrayPublished=NewArt.getNewsIsPublish();
+        return ResponseEntity.status(200).body(ArrayPublished);
+    }
 
 @GetMapping("/getbycategiry")
 public ResponseEntity GetByCategory(@RequestParam String category){
